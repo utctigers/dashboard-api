@@ -55,10 +55,11 @@ test.describe('Timesheets API', () => {
   });
 
   test('POST /api/timesheets/logout - should log employee out', async ({ request }) => {
+    console.log('Logging out employee with ID:', employeeId);
     const logoutData = {
       employee_id: employeeId,
       latitude: 40.7128,
-      longitude: -74.0060
+      longitude: -74.0060,
     };
 
     const response = await request.post(`${API_BASE}/timesheets/logout`, {
