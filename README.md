@@ -1,12 +1,12 @@
-# Dashboard API - Aurora DSQL Backend
+# Dashboard API - DynamoDB Backend
 
-Backend API server for the Business Dashboard with Aurora DSQL integration.
+Backend API server for the Business Dashboard with DynamoDB integration.
 
 ## Features
 
 - **Employee Management**: Full CRUD operations
-- **Aurora DSQL**: Direct PostgreSQL connection to cluster `4vthvxld47txd4lmgqpjzagqki`
-- **Mock Fallback**: Automatic fallback to mock data if Aurora DSQL unavailable
+- **DynamoDB**: NoSQL database with automatic scaling
+- **Mock Fallback**: Automatic fallback to mock data if DynamoDB unavailable
 - **CORS Enabled**: Ready for Angular frontend integration
 
 ## API Endpoints
@@ -19,7 +19,7 @@ Backend API server for the Business Dashboard with Aurora DSQL integration.
 - `GET /api/employees/stats` - Get employee statistics
 
 ### Health Check
-- `GET /health` - Server status and Aurora DSQL info
+- `GET /health` - Server status and DynamoDB info
 
 ## Quick Start
 
@@ -40,9 +40,8 @@ npm start
 ## Environment Variables
 
 ```env
-AURORA_ENDPOINT=4vthvxld47txd4lmgqpjzagqki.dsql.us-east-1.on.aws
-AURORA_PORT=5432
-AURORA_DATABASE=postgres
+DYNAMODB_TABLE_PREFIX=dashboard
+AWS_REGION=us-east-1
 PORT=3001
 ```
 
@@ -64,9 +63,9 @@ curl -X POST http://localhost:3001/api/employees \
   -d '{"name":"Test User","email":"test@company.com","department":"IT","role":"Developer","salary":75000}'
 ```
 
-## Aurora DSQL Integration
+## DynamoDB Integration
 
-- Connects to cluster `4vthvxld47txd4lmgqpjzagqki.dsql.us-east-1.on.aws`
-- Uses PostgreSQL protocol
+- Uses AWS DynamoDB for data storage
+- NoSQL document-based storage
 - Automatic fallback to mock data
-- Connection pooling for performance
+- Serverless and scalable

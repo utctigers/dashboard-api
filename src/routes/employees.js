@@ -36,6 +36,29 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/employees/:id - Get employee by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    if (!id || isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid employee ID' });
+    }
+    
+    const result = await db.query('SELECT * FROM employees WHERE id = $1', [parseInt(id)]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+    
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error fetching employee:', error);
+    res.status(500).json({ error: 'Failed to fetch employee' });
+  }
+});
+
+
 // POST /api/employees - Create new employee
 router.post('/', async (req, res) => {
   try {
@@ -63,7 +86,7 @@ router.put('/:id', async (req, res) => {
       'UPDATE employees SET name = $1, email = $2, phone = $3, department = $4, role = $5, salary = $6, start_date = $7, status = $8 WHERE id = $9 RETURNING *',
       [name, email, phone, department, role, salary, start_date, status, id]
     );
-    
+    console.log('Update Result:', result);
     if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Employee not found' });
     }
@@ -81,7 +104,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     
     const result = await db.query('DELETE FROM employees WHERE id = $1', [id]);
-    
+    console.log('Delete Result:', result);
     if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Employee not found' });
     }

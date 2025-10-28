@@ -19,9 +19,9 @@ app.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 
     message: 'Dashboard API Server Running',
-    aurora: {
-      cluster: '4vthvxld47txd4lmgqpjzagqki',
-      endpoint: '4vthvxld47txd4lmgqpjzagqki.dsql.us-east-1.on.aws'
+    dynamodb: {
+      region: process.env.AWS_REGION || 'us-east-1',
+      tablePrefix: process.env.DYNAMODB_TABLE_PREFIX || 'dashboard'
     }
   });
 });
@@ -39,7 +39,6 @@ app.use('*', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Dashboard API Server running on port ${PORT}`);
-  console.log(`📊 Aurora DSQL Cluster: 4vthvxld47txd4lmgqpjzagqki`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
   console.log(`👥 Employees API: http://localhost:${PORT}/api/employees`);
   console.log(`📦 Inventory API: http://localhost:${PORT}/api/inventory`);
