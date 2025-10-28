@@ -79,7 +79,7 @@ test.describe('Employees API', () => {
       start_date: '2024-01-01',
       status: 'Active'
     };
-
+    console.log('Updating employee with ID:', employeeId);
     const response = await retryRequest(async () => {
       const res = await request.put(`${API_BASE}/employees/${employeeId}`, {
         data: updatedData

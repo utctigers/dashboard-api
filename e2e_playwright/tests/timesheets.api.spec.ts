@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const API_BASE = 'http://localhost:3001/api';
 
-test.describe('Timesheets API', () => {
+test.describe.only('Timesheets API', () => {
   let timesheetId: number;
   let employeeId = 1;
 
@@ -59,9 +59,9 @@ test.describe('Timesheets API', () => {
     const logoutData = {
       employee_id: employeeId,
       latitude: 40.7128,
-      longitude: -74.0060,
+      longitude: -74.0060
     };
-
+    console.log('Logout data:', logoutData);
     const response = await request.post(`${API_BASE}/timesheets/logout`, {
       data: logoutData
     });
@@ -83,17 +83,16 @@ test.describe('Timesheets API', () => {
 
   test('PUT /api/timesheets/:id - should update timesheet', async ({ request }) => {
     const updatedData = {
-      employee_id: employeeId,
       date: '2024-01-20',
       hours_worked: 7.5,
       project: 'Updated Project',
       status: 'Approved'
     };
-
+    console.log('Updating timesheet with ID:', timesheetId);
     const response = await request.put(`${API_BASE}/timesheets/${timesheetId}`, {
       data: updatedData
     });
-    
+    console.log('Update response status:', response);
     expect(response.status()).toBe(200);
     const timesheet = await response.json();
     expect(timesheet.hours_worked).toBe(updatedData.hours_worked);

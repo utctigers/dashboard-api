@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
     console.log('📝 POST /api/timesheets - Creating timesheet:', req.body);
     
     const result = await query(
-      'INSERT INTO timesheets (employee_id, date, hours_worked, project, status) VALUES (?, ?, ?, ?, ?)',
+      'INSERT INTO timesheets (employee_id, date, hours_worked, project, status) VALUES ($1, $2, $3, $4, $5)',
       [employee_id, date, hours_worked, project, status]
     );
     
@@ -45,11 +45,11 @@ router.put('/:id', async (req, res) => {
     console.log(`✏️ PUT /api/timesheets/${id} - Updating timesheet:`, req.body);
     
     const result = await query(
-      'UPDATE timesheets SET employee_id = ?, date = ?, hours_worked = ?, project = ?, status = ? WHERE id = ?',
+      'UPDATE timesheets SET employee_id = $1, date = $2, hours_worked = $3, project = $4, status = $5 WHERE id = $6',
       [employee_id, date, hours_worked, project, status, id]
     );
     
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Timesheet not found' });
     }
     
@@ -70,9 +70,9 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     console.log(`🗑️ DELETE /api/timesheets/${id} - Deleting timesheet`);
     
-    const result = await query('DELETE FROM timesheets WHERE id = ?', [id]);
+    const result = await query('DELETE FROM timesheets WHERE id = $1', [id]);
     
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Timesheet not found' });
     }
     
@@ -96,8 +96,8 @@ router.post('/login', async (req, res) => {
     
     const result = await query(
       `INSERT INTO timesheet_logs (employee_id, login_time, login_latitude, login_longitude, 
-       phone_type, phone_number, status) VALUES (?, ?, ?, ?, ?, ?, 'logged_in')`,
-      [employee_id, login_time, latitude, longitude, phone_type, phone_number]
+       phone_type, phone_number, status) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [employee_id, login_time, latitude, longitude, phone_type, phone_number, 'logged_in']
     );
     
     console.log('✅ Employee logged in successfully');
@@ -126,7 +126,7 @@ router.post('/logout', async (req, res) => {
     
     // Find the latest login record for this employee
     const loginRecord = await query(
-      `SELECT * FROM timesheet_logs WHERE employee_id = ? AND status = 'logged_in' 
+      `SELECT * FROM timesheet_logs WHERE employee_id = $1 AND status = 'logged_in' 
        ORDER BY login_time DESC LIMIT 1`,
       [employee_id]
     );
@@ -139,9 +139,9 @@ router.post('/logout', async (req, res) => {
     
     // Update the record with logout information
     await query(
-      `UPDATE timesheet_logs SET logout_time = ?, logout_latitude = ?, 
-       logout_longitude = ?, status = 'logged_out' WHERE id = ?`,
-      [logout_time, latitude, longitude, loginId]
+      `UPDATE timesheet_logs SET logout_time = $1, logout_latitude = $2, 
+       logout_longitude = $3, status = $4 WHERE id = $5`,
+      [logout_time, latitude, longitude, 'logged_out', loginId]
     );
     
     // Calculate hours worked
@@ -171,7 +171,7 @@ router.get('/logs/:employee_id', async (req, res) => {
     console.log(`📋 GET /api/timesheets/logs/${employee_id} - Fetching time logs`);
     
     const result = await query(
-      `SELECT * FROM timesheet_logs WHERE employee_id = ? 
+      `SELECT * FROM timesheet_logs WHERE employee_id = $1 
        ORDER BY login_time DESC`,
       [employee_id]
     );

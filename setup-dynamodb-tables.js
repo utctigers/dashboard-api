@@ -28,6 +28,12 @@ const tables = [
     KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
     AttributeDefinitions: [{ AttributeName: 'id', AttributeType: 'N' }],
     BillingMode: 'PAY_PER_REQUEST'
+  },
+  {
+    TableName: `${TABLE_PREFIX}-timesheet-logs`,
+    KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
+    AttributeDefinitions: [{ AttributeName: 'id', AttributeType: 'N' }],
+    BillingMode: 'PAY_PER_REQUEST'
   }
 ];
 
@@ -41,7 +47,10 @@ const sampleData = {
     { id: 2, name: 'Laptops', sku: 'LTP-002', category: 'Electronics', stock: 5, min_stock: 8, max_stock: 25, price: 1299.99 }
   ],
   timesheets: [
-    { id: 1, employee_id: 1, employee_name: 'John Smith', date: '2024-01-15', hours_worked: 8, project: 'Website Development', status: 'Approved', login_time: '09:00', logout_time: '17:00' }
+    { id: 1, employee_id: 1, date: '2024-01-15', hours_worked: 8, project: 'Website Development', status: 'Approved' }
+  ],
+  'timesheet-logs': [
+    { id: 1, employee_id: 1, login_time: '2024-01-15T09:00:00Z', logout_time: '2024-01-15T17:00:00Z', login_latitude: 40.7128, login_longitude: -74.0060, logout_latitude: 40.7128, logout_longitude: -74.0060, phone_type: 'iPhone', phone_number: '555-0123', status: 'logged_out' }
   ]
 };
 
