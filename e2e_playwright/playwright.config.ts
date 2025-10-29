@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import type { } from 'node';
 
 export default defineConfig({
   testDir: './tests',
@@ -33,7 +34,7 @@ export default defineConfig({
     command: 'npm start',
     url: 'http://localhost:3001/health',
     cwd: '../',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !process.env['CI'],
     timeout: 60 * 1000,
   },
 });
