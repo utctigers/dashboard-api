@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const API_BASE = 'http://localhost:3001/api';
 
-test.describe.only('Timesheets API', () => {
+test.describe('Timesheets API', () => {
   let timesheetId: number;
   let employeeId = 1;
 
